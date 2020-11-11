@@ -3,6 +3,9 @@ let events  = [];
 
 //Collection to store the clients
 let clients = [];
+
+let restrictedErrMsg = "The isRestricted value of the event can only be true/false.";
+let emptyNameErrorMsg = "The event name can't be empty.";
 /**
  * Creates a new event with a unique id
  * @param {string} name - the name of the event
@@ -14,28 +17,58 @@ function Event(name, isRestricted) {
     this.isRestricted = isRestricted;
 }
 
-function addEvent(name, isRestricted) {
+function Event(name) {
+    this.id           = events.length;
+    this.name         = name;
+    this.isRestricted = false;
+}
+
+function Client(name, gender, age) {
+    this.name   = name;
+    this.gender = gender;
+    this.age    = age;
+}
+
+function createEvent(name, isRestricted) {
     if (typeof isRestricted !== "boolean") {
-        console.log("The isRestricted value of the event can only be true/false.");
-        return;
-    } else if (name == null) {
-        console.log("The event name can't be empty.");
-        return;
+        throw new Error(restrictedErrMsg);
+    } else if (name == null || name == "") {
+        throw new Error(emptyNameErrorMsg);
     }
+
     events.push(new Event(name, isRestricted));
     console.log("The event \"" + name + "\" was successfully added to the database.");
+    return true;
+}
+
+function updateEvent(id, name, isRestricted) {
+    if (typeof isRestricted !== "boolean") {
+        throw new Error(restrictedErrMsg);
+    } else if (name == null || name == "") {
+        throw new Error(emptyNameErrorMsg);
+    }
+
+    let eventIndex = events.findIndex((event => event.id == id));
+    events[eventIndex].name = name;
+    events[eventIndex].isRestricted = isRestricted;
+}
+
+function saveAllEvents(...events) {
+    events.push(events)
 }
 
 function removeEventById(id) {
     if (id < 0) {
         console.log("The Event ID cannot be negative.");
-        return;
+        return false;
     }
-    let event  = events.find(event => event.id == id)
+
+    let event   = events.find(event => event.id == id)
     let eventId = events.indexOf(event);
     events.splice(eventId, 1);
     
     console.log("The event \"" + event.name + "\" has been successfully removed");
+    return true;
 }
 
 function showEvents() {
@@ -54,10 +87,11 @@ function showEvents() {
 
 
 
-addEvent("1", true);
-addEvent("2", false);
-addEvent("3", false);
-addEvent("4", true);
-showEvents();
-removeEventById(2);
+createEvent("1", true);
+updateEvent(0, "Paradox", false);
+//createEvent("2", false);
+//createEvent("3", false);
+//createEvent("4", true);
+//showEvents();
+//removeEventById(2);
 showEvents();
