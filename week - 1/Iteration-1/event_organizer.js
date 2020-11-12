@@ -5,8 +5,8 @@ let events  = [];
 let clients = [];
 let eventIdIcrement = 0;
 
-let canAddClients = true;
-let canAddEvents = true;
+let canAddClients   = true;
+let canAddEvents    = true;
 
 //Error messages
 const RESTRICTED_EVENT_ERROR_MESSAGE = "The isRestricted value of the event can only be true/false.";
@@ -66,7 +66,7 @@ function Client(name, gender, age, money) {
  */
 function toggleSystemFunction(systemFunction) {
     if (systemFunction == "events") {
-        canAddEvents = !canAddEvents;
+        canAddEvents  = !canAddEvents;
         console.log("The adding permission of new events has been changed.");
     } else if (systemFunction == "clients") {
         canAddClients = !canAddClients;
@@ -391,7 +391,9 @@ function showAllClientsOnEvent(event, filterByGender) {
     if (event.eventClients.length <= 0) {
         console.log("There are no clients for this event.");
         return false;
+        
     } else if (arguments.length == 2) {
+
         if(filterByGender.localeCompare("male") != 0 && filterByGender.localeCompare("female") != 0) {
             throw new Error(INVALID_GENDER_ERROR_MESSAGE);
         }
@@ -402,6 +404,7 @@ function showAllClientsOnEvent(event, filterByGender) {
         });
         return true;
     }
+
     console.log("Clients of event \"" + event.name + "\":");
     event.eventClients.forEach(client => {
         console.log("Name: " + client.name + " | Gender: " + client.gender + " | Age: " + client.age);
