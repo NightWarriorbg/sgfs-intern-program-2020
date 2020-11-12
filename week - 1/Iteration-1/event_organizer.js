@@ -1,8 +1,8 @@
 //Collection to store the events
-let events  = [];
+let events          = [];
 
 //Collection to store the clients
-let clients = [];
+let clients         = [];
 let eventIdIcrement = 0;
 
 let canAddClients   = true;
@@ -391,7 +391,7 @@ function showAllClientsOnEvent(event, filterByGender) {
     if (event.eventClients.length <= 0) {
         console.log("There are no clients for this event.");
         return false;
-        
+
     } else if (arguments.length == 2) {
 
         if(filterByGender.localeCompare("male") != 0 && filterByGender.localeCompare("female") != 0) {
