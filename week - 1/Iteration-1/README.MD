@@ -1,1 +1,1 @@
-Run the file with "node .<name of file>"
+Run the file with: node ."name of file"
