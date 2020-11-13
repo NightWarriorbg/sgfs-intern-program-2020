@@ -1,0 +1,12 @@
+body {
+    margin: auto;
+}
+
+.client-area {
+    margin: 0 auto;
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+}
