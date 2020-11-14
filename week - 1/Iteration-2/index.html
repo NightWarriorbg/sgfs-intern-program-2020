@@ -20,9 +20,11 @@
                     <label for="event-price">Price: </label>
                     <input type="number" name="event-price" id="event-price" min="0"><br><br>
 
-                    <input type="submit" name="submit" value="Add">
+                    <input type="submit" name="submit" value="Add" onclick="addEventForm()">
                 </form>
             </fieldset>
+
+            <p id="validation-message"></p>
         </div>
 
         <script src="event_organizer.js"></script>

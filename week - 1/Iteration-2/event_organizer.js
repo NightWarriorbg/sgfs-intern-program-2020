@@ -139,7 +139,7 @@ function toggleSystemFunction(systemFunction) {
  */
 function addEvent(event) {
     if (event.name == null || event.name == "") {
-        throw new Error(ERROR_MESSAGE.emptyName);
+        errorMSg = ERROR_MESSAGE.emptyName;
     }
     
     if(!checkCanAddEventsStatus()) {
@@ -155,7 +155,7 @@ function addEvent(event) {
     }
 
     getEventCollection().push(event);
-    console.log(`The event ${event.name} + was successfully added to the database.`);
+    errorMSg = `The event ${event.name} + was successfully added to the database.`;
     return true;
 }
 
