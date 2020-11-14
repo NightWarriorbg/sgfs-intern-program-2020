@@ -4,21 +4,28 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div class="client-area">
-            <form action="">
-                <label for="event-name">Име: </label>
-                <input type="text" name="event-name" id="event-name"><br>
+        <div class="form-area">
+            <fieldset>
+                <legend>Add new Event</legend>
+                <form action="" name="add-event-form">
+                    <label for="event-name">Name: </label>
+                    <input type="text" name="event-name" id="event-name" required><br><br>
 
-                <select id="event-restriction" name="event-restriction">
-                    <option value="yes">yes</option>
-                    <option value="no">no</option>
-                </select><br>
+                    <label for="event-restriction">Restricted for underaged: </label>
+                    <select id="event-restriction" name="event-restriction">
+                        <option value="yes">Yes</option>
+                        <option value="no" selected>No</option>
+                    </select><br><br>
 
-                <label for="event-name">Цена: </label>
-                <input type="text" name="event-price" id="event-price"><br>
-            </form>
+                    <label for="event-price">Price: </label>
+                    <input type="number" name="event-price" id="event-price" min="0"><br><br>
+
+                    <input type="submit" name="submit" value="Add">
+                </form>
+            </fieldset>
         </div>
 
         <script src="event_organizer.js"></script>
+        <script src="form_validation.js"></script>
     </body>
 </html>

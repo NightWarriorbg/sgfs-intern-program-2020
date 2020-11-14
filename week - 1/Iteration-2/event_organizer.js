@@ -8,14 +8,11 @@ let eventIdIcrement  = 0;
 let canAddClients    = true;
 let canAddEvents     = true;
 
-//HTML input form information
-
-
 //Error messages
 const ERROR_MESSAGE = {
     restrictedEvent : "The isRestricted value of the event can only be true/false.",
     emptyName : "The name can't be empty.",
-    invalidGender : "Please choose a valid gender(male/female).";
+    invalidGender : "Please choose a valid gender(male/female).",
     invalidAge : "The age can't be a negative number"
 };
 
@@ -91,6 +88,7 @@ function Event(name, isRestricted = false, price = 0) {
     this.eventClients = [];
     this.dateAdded    = getCurrentDate();
     this.dateUpdated  = this.dateAdded;
+    eventIdIcrement++;
 }
 
 
@@ -214,15 +212,21 @@ function addAllEvents(...allEvents) {
  * @param {number} id 
  */
 function removeEventById(id) {
+
+    let event   = getEventCollection().find(event => event.id == id);
+
     if (id < 0) {
         throw new Error("The Event ID cannot be negative.");
     }
 
-    let event   = getEventCollection().find(event => event.id == id)
+    if (!event) {
+        throw new Error("An Event with this id doesn't exist.");
+    }
+
     let eventId = getEventCollection().indexOf(event);
     getEventCollection().splice(eventId, 1);
     
-    console.log(`The event + ${event.name} + has been successfully removed.`);
+    console.log(`The event ${event.name} has been successfully removed.`);
     return true;
 }
 
@@ -235,8 +239,8 @@ function showEvents() {
         return false;
     }
     getEventCollection().forEach(event => {
-        process.stdout.write(`[${event.id}] ${event.name} : `);
-        event.isRestricted ? process.stdout.write("18+") : process.stdout.write("All ages");
+        //process.stdout.write(`[${event.id}] ${event.name} : `);
+        //event.isRestricted ? process.stdout.write(" 18+") : process.stdout.write(" All ages");
         console.log(` | Price= ${event.price}`);
     });
     return true;
@@ -261,10 +265,10 @@ function getEventWithTheMostClients() {
 
     const allEventsWithMaxClients = getEventCollection().filter(event => event.eventClients.length == maxClients);
 
-    process.stdout.write("All events with the same number of maximum clients: ");
+    //process.stdout.write("All events with the same number of maximum clients: ");
 
     allEventsWithMaxClients.forEach(event => {
-        process.stdout.write(event.name +" ");
+        //process.stdout.write(event.name +" ");
     });
     console.log("\n");
 }
@@ -280,9 +284,9 @@ function showAllEventsForUnderaged() {
         return false;
     }
 
-    process.stdout.write("All events suitable for underaged clients: ")
+    //process.stdout.write("All events suitable for underaged clients: ")
     allEventsForUnderaged.forEach(event => {
-        process.stdout.write(event.name + " ");
+        //process.stdout.write(event.name + " ");
     });
     console.log("\n");
     return true;
@@ -307,7 +311,7 @@ function showAllEventsAndGroupByIsRestricted() {
     sortedEventsByRestriction.forEach(event => {
 
         let eventPrefix = event.isRestricted ? "* " : "# ";
-        event.name      = `${prefix}${event.name}`;
+        event.name      = `${eventPrefix}${event.name}`;
 
         console.log(event.name);
     });
@@ -325,22 +329,14 @@ function showAllEventsByCriteria(flag) {
 
     if (flag.localeCompare("underaged") == 0) {
         criteria  = getEventCollection().filter(event => !event.isRestricted);
-    }
-
-    if (flag.localeCompare("18+") == 0) {
+    } else if (flag.localeCompare("18+") == 0) {
         criteria  = getEventCollection().filter(event => event.isRestricted);
-    }
-    
-    if (flag.includes("name=")) {
+    } else if (flag.includes("name=")) {
         let split = flag.split("=");
         criteria  = getEventCollection().filter(event => event.name.includes(split[1]));
-    }
-    
-    if (flag.localeCompare("free") == 0) {
+    } else if (flag.localeCompare("free") == 0) {
         criteria  = getEventCollection().filter(event => event.price == 0);
-    }
-    
-    if (flag.localeCompare("paid") == 0) {
+    }else if (flag.localeCompare("paid") == 0) {
         criteria  = getEventCollection().filter(event => event.price > 0);
     } else {
         console.log("Unrecofnized command!");
@@ -353,8 +349,8 @@ function showAllEventsByCriteria(flag) {
     }
 
     criteria.forEach(event => {
-        process.stdout.write(`[${event.id}] ${event.name}`);
-        event.isRestricted ? console.log("18+") : console.log("All ages");
+        //process.stdout.write(`[${event.id}] ${event.name}`);
+        event.isRestricted ? console.log(" 18+") : console.log(" All ages");
     });
     
     return true;
