@@ -16,6 +16,8 @@ const ERROR_MESSAGE = {
     invalidAge : "The age can't be a negative number"
 };
 
+let validationMessageText = undefined;
+
 
 /**
  * 
@@ -139,24 +141,16 @@ function toggleSystemFunction(systemFunction) {
  */
 function addEvent(event) {
     if (event.name == null || event.name == "") {
-        errorMSg = ERROR_MESSAGE.emptyName;
+        validationMessageText = ERROR_MESSAGE.emptyName;
+        return false;
     }
     
     if(!checkCanAddEventsStatus()) {
         return console.log("The adding of new events has been stopped by the system. To turn it on please run the toggleSystemFunction.");
     }
-    
-    if (event.price > 0) {
-        event.name = `${event.name}`;
-    } 
-    
-    if (event.price == 0) {
-        event.name = `!${event.name}`;
-    }
 
+    validationMessageText = `The event ${event.name} was successfully added to the database.`;
     getEventCollection().push(event);
-    errorMSg = `The event ${event.name} + was successfully added to the database.`;
-    return true;
 }
 
 /**
@@ -635,11 +629,11 @@ function Testing8() {
     addClientToEvent(gosho, event7);
 }
 
-Testing1(); // Always needed for correct testing
-Testing2();
-Testing3();
-Testing4();
-Testing5();
-Testing6();
-Testing7();
-Testing8();
+//Testing1(); // Always needed for correct testing
+//Testing2();
+//Testing3();
+//Testing4();
+//Testing5();
+//Testing6();
+//Testing7();
+//Testing8();

@@ -7,20 +7,20 @@
         <div class="form-area">
             <fieldset>
                 <legend>Add new Event</legend>
-                <form action="" name="add-event-form">
-                    <label for="event-name">Name: </label>
-                    <input type="text" name="event-name" id="event-name" required><br><br>
+                <form name="form--add-event" id="form--add-event">
+                    <label for="input--event-name">Name: </label>
+                    <input type="text" name="input--event-name" id="input--event-name"><br><br>
 
-                    <label for="event-restriction">Restricted for underaged: </label>
-                    <select id="event-restriction" name="event-restriction">
-                        <option value="yes">Yes</option>
-                        <option value="no" selected>No</option>
+                    <label for="select--event-restriction">Restricted for underaged: </label>
+                    <select id="select--event-restriction" name="select--event-restriction">
+                        <option value="true">Yes</option>
+                        <option value="false" selected>No</option>
                     </select><br><br>
 
-                    <label for="event-price">Price: </label>
-                    <input type="number" name="event-price" id="event-price" min="0"><br><br>
+                    <label for="input--event-price">Price: </label>
+                    <input type="number" name="input--event-price" id="input--event-price" min="0" value="0"><br><br>
 
-                    <input type="submit" name="submit" value="Add" onclick="addEventForm()">
+                    <input type="submit" name="action--add-event" id="action--add-event" value="Add">
                 </form>
             </fieldset>
 
