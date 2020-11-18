@@ -1,0 +1,40 @@
+body {
+    margin: 0 auto;
+}
+
+#box {
+    margin: 0 auto;
+    border: 1px;
+}
+
+.layout_center {
+    margin: 0 auto;;
+}
+
+.form-area {
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 300px;;
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+}
+
+#layout--events {
+    margin: 0 auto;
+    margin-top: 100px;
+    text-align: center;
+}
+
+#layout--events thead td {
+    background-color: #e9e1be;
+    border: 1px solid #000;
+}
+
+#layout--events tbody td {
+    background-color: #dbad92;
+    border: 1px solid #000;
+    border-top: none;
+}

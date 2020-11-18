@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-        <div class="form-area">
-            <fieldset>
-                <legend>Add new Event</legend>
-                <form name="form--add-event" id="form--add-event">
-                    <label for="input--event-name">Name: </label>
-                    <input type="text" name="input--event-name" id="input--event-name"><br><br>
+        <div id="box" >
+            <div class="form-area">
+                <fieldset>
+                    <legend>Add new Event</legend>
+                    <form name="form--add-event" id="form--add-event">
+                        <label for="input--event-name">Name: </label>
+                        <input type="text" name="input--event-name" id="input--event-name"><br><br>
 
-                    <label for="select--event-restriction">Restricted for underaged: </label>
-                    <select id="select--event-restriction" name="select--event-restriction">
-                        <option value="true">Yes</option>
-                        <option value="false" selected>No</option>
-                    </select><br><br>
+                        <label for="select--event-restriction">Restricted for underaged: </label>
+                        <select id="select--event-restriction" name="select--event-restriction">
+                            <option value="true">Yes</option>
+                            <option value="false" selected>No</option>
+                        </select><br><br>
 
-                    <label for="input--event-price">Price: </label>
-                    <input type="number" name="input--event-price" id="input--event-price" min="0" value="0"><br><br>
+                        <label for="input--event-price">Price: </label>
+                        <input type="number" name="input--event-price" id="input--event-price" min="0" value="0"><br><br>
 
-                    <input type="submit" name="action--add-event" id="action--add-event" value="Add">
-                </form>
-            </fieldset>
+                        <input type="submit" name="action--add-event" id="action--add-event" value="Add">
+                    </form>
+                </fieldset>
 
-            <p id="validation-message"></p>
+                <p id="validation-message"></p>
+            </div>
+
+            <br>
+
+            <div id="layout--events">
+                No events.
+            </div>
+
         </div>
-
-        <script src="event_organizer.js"></script>
-        <script src="form_validation.js"></script>
+        <script src="scripts/event_organizer.js"></script>
+        <script src="scripts/form_validation.js"></script>
     </body>
 </html>
