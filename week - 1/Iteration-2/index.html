@@ -7,7 +7,7 @@
         <div id="box" >
             <div class="form-area">
                 <fieldset>
-                    <legend>Add new Event</legend>
+                    <legend id="add-event-form-title">Add new Event</legend>
                     <form name="form--add-event" id="form--add-event">
                         <label for="input--event-name">Name: </label>
                         <input type="text" name="input--event-name" id="input--event-name"><br><br>
@@ -32,6 +32,28 @@
 
             <div id="layout--events">
                 No events.
+            </div>
+            
+            <div class="form-area">
+                <fieldset id="Edit-Event" style="display: none;">
+                    <legend id="edit-event-form-title">Edit Event</legend>
+                        <form name="form--edit-event" id="form--edit-event">
+                            <label for="input--new-event-name">Name: </label>
+                            <input type="text" name="input--new-event-name" id="input--new-event-name"><br><br>
+
+                            <label for="select--new-event-restriction">Restricted for underaged: </label>
+                            <select id="select--new-event-restriction" name="select--new-event-restriction">
+                                <option value="true">Yes</option>
+                                <option value="false" selected>No</option>
+                            </select><br><br>
+
+                            <label for="input--new-event-price">Price: </label>
+                            <input type="number" name="input--new-event-price" id="input--new-event-price" min="0" value="0"><br><br>
+
+                            <input type="submit" name="action--edit-event" id="action--edit-event" value="Еdit">
+                        </form>
+                    </legend>
+                </fieldset>
             </div>
 
         </div>

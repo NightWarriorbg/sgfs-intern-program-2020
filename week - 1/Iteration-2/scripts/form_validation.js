@@ -1,26 +1,16 @@
-const eventNameInput         = document.getElementById("input--event-name");
-const eventRestrictionSelect = document.getElementById("select--event-restriction");
-const eventPriceInput        = document.getElementById("input--event-price");
-const addEventForm           = document.getElementById("form--add-event");
-const validationMessage      = document.getElementById("validation-message");
-const eventLayout            = document.getElementById("layout--events");
+const eventNameInput            = document.getElementById("input--event-name");
+const eventRestrictionSelect    = document.getElementById("select--event-restriction");
+const eventPriceInput           = document.getElementById("input--event-price");
+const addEventForm              = document.getElementById("form--add-event");
 
-addEventForm.addEventListener('submit', function(e) {
-    const eventName             = eventNameInput.value;
-    const eventRestriction      = eventRestrictionSelect.value === 'true';
-    const eventPrice            = eventPriceInput.value;
+const eventNewNameInput         = document.getElementById("input--new-event-name")
+const eventNewRestrictionSelect = document.getElementById("select--new-event-restriction");
+const eventNewPriceInput        = document.getElementById("input--new-event-price");
+const editEventForm             = document.getElementById("form--add-event");
+const editEventFieldset         = document.getElementById("Edit-Event");
 
-    const newEvent              = new Event(eventName, eventRestriction, eventPrice);
-
-    addEvent(newEvent);
-    validationMessage.innerHTML = validationMessageText;
-    displayEvents();
-    e.preventDefault();
-
-});
-
-
-
+const validationMessage         = document.getElementById("validation-message");
+const eventLayout               = document.getElementById("layout--events");
 function displayEvents() {
 
     template = [`<table cellspacing="0" class="layout_center">
@@ -44,36 +34,89 @@ function displayEvents() {
                         <td style="border-right:none;">${event.name}</td>
                         <td style="border-right:none;">${event.isRestricted ? "yes" : "no"}</td>
                         <td style="border-right:none;">${event.price == 0 ? "Free" : event.price}</td>
-                        <td style="border-right:none;"><a href="#0" item-id=${event.id} class="action--edit-event">E</a></td>
-                        <td><a href="#0" item-id=${event.id} class="action--delete-event">X</a></td>
+                        <td style="border-right:none;"><button event-id=${event.id} class="action--edit-event">E</button></td>
+                        <td><button event-id=${event.id} class="action--delete-event">X</button></td>
                     </tr>
         `);
     });
 
     template.push(`</tbody
                 </table>`);
+
     eventLayout.innerHTML = template.join('');
+
+    editEvent();
+    removeEvent();
 }
 
+
+addEventForm.addEventListener('submit', function(e) {
+    const eventName             = eventNameInput.value;
+    const eventRestriction      = eventRestrictionSelect.value === 'true';
+    const eventPrice            = eventPriceInput.value;
+
+    const newEvent              = new Event(eventName, eventRestriction, eventPrice);
+
+    addEvent(newEvent);
+    validationMessage.innerHTML = validationMessageText;
+    displayEvents();
+    
+    e.preventDefault();
+
+});
+
+editEventForm.addEventListener('submit', function(e) {
+    const eventName             = eventNewNameInput.value;
+    const eventRestriction      = eventNewRestrictionSelect.value === 'true';
+    const eventPrice            = eventNewPriceInput.value;
+
+    let eventId                 = e.target.getAttribute("event-id");
+
+    updateEvent(eventId, eventName, eventRestriction, eventPrice);
+    
+    validationMessage.innerHTML  = validationMessageText;
+    displayEvents();
+    
+    e.preventDefault();
+
+});
+
 function removeEvent() {
-    let deleteBtns = document.getElementsByClassName("action--delete-event");
+    let deleteBtnsCollection = document.getElementsByClassName("action--delete-event");
+    
+    for(let i = 0; i < deleteBtnsCollection.length; i++) {
+        deleteBtnsCollection[i].addEventListener('click', function(e) {
 
-    for(let i = 0; i < deleteBtns.length; i++) {
-
-        const button = deleteBtns[i];
-        
-        button.addEventListener('click', function(e) {
-
-            let currentEvent = e.target;
-            let eventId = currentEvent.getAttribute("item-id");
-            let td = currentEvent.parentElement;
-            td.parentNode.removeChild(tr);
+            let eventId                 = e.target.getAttribute("event-id");
             removeEventById(eventId);
+            displayEvents();
+            validationMessage.innerHTML = validationMessageText;
 
-            e.preventDefault();
+            //e.preventDefault();
         });
     }
         
 }
 
-removeEvent();
+function editEvent() {
+    let editBtnsCollection = document.getElementsByClassName("action--edit-event");
+
+    for(let i = 0; i < editBtnsCollection.length; i++) {
+        editBtnsCollection[i].addEventListener('click', function(e) {
+
+            let eventId                     = e.target.getAttribute("event-id");
+            let event                       = getEventById(eventId);
+
+            editEventFieldset.style.display = "block";
+            eventNewNameInput.value         = event.name;
+            eventNewRestrictionSelect.value = event.isRestricted;
+            eventNewPriceInput.value        = event.price;
+
+            
+            
+        });
+    }
+        
+}
+
+displayEvents();

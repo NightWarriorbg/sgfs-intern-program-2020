@@ -173,9 +173,9 @@ function updateEvent(id, name, isRestricted, price) {
     }
 
 
-    let eventIndex                                 = getEventCollection().findIndex((event => event.id == id));
+    let eventIndex                                = getEventCollection().findIndex((event => event.id == id));
 
-    console.log(`The event ${getEventCollection()[eventIndex].name} has been successfully updated.`);
+    validationMessageText = (`The event ${getEventCollection()[eventIndex].name} has been successfully updated.`);
 
     getEventCollection()[eventIndex].name         = name;
     getEventCollection()[eventIndex].isRestricted = isRestricted;
@@ -207,7 +207,7 @@ function addAllEvents(...allEvents) {
  */
 function removeEventById(id) {
 
-    let event   = getEventCollection().find(event => event.id == id);
+    let event = getEventCollection().find(event => event.id == id);
 
     if (id < 0) {
         throw new Error("The Event ID cannot be negative.");
@@ -220,8 +220,13 @@ function removeEventById(id) {
     let eventId = getEventCollection().indexOf(event);
     getEventCollection().splice(eventId, 1);
     
-    console.log(`The event ${event.name} has been successfully removed.`);
+    validationMessageText = `The event ${event.name} has been successfully removed.`;
     return true;
+}
+
+function getEventById(id) {
+    let event = getEventCollection().find(event => event.id == id);
+    return event;
 }
 
 /**
@@ -519,7 +524,7 @@ event5 = new Event("Event 5", true, 10);
 event6 = new Event("Event 6");
 event7 = new Event("Event 7", false, 10);
 event8 = new Event("Event 8");
-event9 = new Event("Event 9", false, 1);*/
+event9 = new Event("Event 9", false, 1);*/  
 
 // Adding events and clients and showing events
 function Testing1() {
