@@ -1,12 +1,14 @@
 //Collection to store the events
-let eventCollection  = [];
+let eventCollection   = [];
 
 //Collection to store the clients
-let clientCollection = [];
-let eventIdIcrement  = 0;
+let clientCollection  = [];
 
-let canAddClients    = true;
-let canAddEvents     = true;
+let eventIdIcrement   = 0;
+let clientIdIncrement = 0;
+
+let canAddClients     = true;
+let canAddEvents      = true;
 
 //Error messages
 const ERROR_MESSAGE = {
@@ -102,12 +104,14 @@ function Event(name, isRestricted = false, price = 0) {
  * @param {number} money - the money that the client has
  */
 function Client(name, gender, age, money) {
+    this.id          = clientIdIncrement;
     this.name        = name;
     this.gender      = gender;
     this.age         = age;
     this.money       = money;
     this.isVIP       = false;
     this.eventsCount = 0;
+    clientIdIncrement++;
 }
 
 /**
@@ -175,7 +179,7 @@ function updateEvent(id, name, isRestricted, price) {
 
     let eventIndex                                = getEventCollection().findIndex((event => event.id == id));
 
-    validationMessageText = (`The event ${getEventCollection()[eventIndex].name} has been successfully updated.`);
+    validationMessageText = (`The event has been successfully updated.`);
 
     getEventCollection()[eventIndex].name         = name;
     getEventCollection()[eventIndex].isRestricted = isRestricted;
@@ -371,7 +375,7 @@ function addClient(client) {
     let isGenderValid = client.gender.localeCompare("male") != 0 && client.gender.localeCompare("female");
 
     if (isNameValid) {
-        throw new Error(ERROR_MESSAGE.emptyName)
+        validationMessageText = (`The name of the client cannot be empty`);
     }
 
     if(isGenderValid) {
@@ -388,7 +392,7 @@ function addClient(client) {
     }
 
     getClientCollection().push(client);
-    console.log("The client \"" + client.name + "\" was successfully added to the database.");
+    validationMessageText = (`The client ${client.name} has been successfully added to the database.`);
     return true;
 }
 
