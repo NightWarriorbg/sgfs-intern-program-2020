@@ -13,9 +13,9 @@ let canAddEvents      = true;
 //Error messages
 const ERROR_MESSAGE = {
     restrictedEvent : "The isRestricted value of the event can only be true/false.",
-    emptyName : "The name can't be empty.",
-    invalidGender : "Please choose a valid gender(male/female).",
-    invalidAge : "The age can't be a negative number"
+    emptyName       : "The name can't be empty.",
+    invalidGender   : "Please choose a valid gender(male/female).",
+    invalidAge      : "The age can't be a negative number"
 };
 
 let validationMessageText = undefined;
@@ -408,6 +408,70 @@ function addAllClients(...allClients) {
     allClients.forEach(client => {
         addClient(client);
     });
+    return true;
+}
+
+/**
+ * Removes a client with a given id from the Database
+ * @param {number} id 
+ */
+function removeClientById(id) {
+
+    let client = getClientCollection().find(client => client.id == id);
+
+    if (id < 0) {
+        throw new Error("The Event ID cannot be negative.");
+    }
+
+    if (!client) {
+        throw new Error("An Event with this id doesn't exist.");
+    }
+
+    let clientId = getClientCollection().indexOf(client);
+    getClientCollection().splice(clientId, 1);
+    return true;
+}
+
+function getClientById(id) {
+    let client = getClientCollection().find(client => client.id == id);
+    return client;
+}
+
+/**
+ * Updates an already existing client with a given id
+ * @param {number} id - id of the event to be updated
+ * @param {string} name - new name of the event
+ * @param {string} gender - the gender of the client 
+ * @param {number} age - the age of the client
+ * @param {number} money - the money of the client 
+ */
+function updateClient(id, name, gender, age, money) {
+
+    let isGenderValid                       = gender.localeCompare("male") != 0 && gender.localeCompare("female");
+
+    if (name == null || name == "") {
+        throw new Error(ERROR_MESSAGE.emptyName);
+    }
+
+    if(isGenderValid) {
+        throw new Error(ERROR_MESSAGE.invalidGender);
+    }
+    
+    if(age < 0) {
+        throw new Error("The age cannot be negative.");
+    }
+
+    if(money < 0) {
+        throw new Error("The money cannot be negative.");
+    }
+
+
+    let clientIndex                          = getClientCollection().findIndex((client => client.id == id));
+
+    getClientCollection()[clientIndex].name   = name;
+    getClientCollection()[clientIndex].gender = gender;
+    getClientCollection()[clientIndex].age    = age;
+    getClientCollection()[clientIndex].money  = money;
     return true;
 }
 
