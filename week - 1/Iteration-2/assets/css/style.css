@@ -30,7 +30,14 @@ body {
     margin-right: 200px;
 }
 
-.layout_center {
+#layout_center {
+    margin: 0 auto;
+    margin-top: 50px;
+    background-color: lightblue;
+    padding: 10px 10px 10px 10px;
+}
+
+.center {
     margin: 0 auto;;
 }
 
@@ -74,6 +81,23 @@ form {
 }
 
 #layout--clients tbody td {
+    background-color: #dbad92;
+    border: 1px solid #000;
+    border-top: none;
+}
+
+#layout--clients-on-event {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 100px;
+}
+
+#layout--clients-on-event thead td {
+    background-color: #e9e1be;
+    border: 1px solid #000;
+}
+
+#layout--clients-on-event tbody td {
     background-color: #dbad92;
     border: 1px solid #000;
     border-top: none;

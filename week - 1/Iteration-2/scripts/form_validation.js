@@ -1,8 +1,3 @@
-const TemplateManager = {
-    
-};
-
-
 /**
  * Event
  */
@@ -151,7 +146,7 @@ const ClientManager = {
     },
 
     setValidationMessage(value) {
-        validationMessage = value;
+        ClientManager.validationMessage.innerHTML = value;
     },
 
     getEditClientFieldset() {
@@ -183,13 +178,15 @@ const ClientManager = {
  */
 function displayEvents() {
 
-    let template = [`<table cellspacing="0" class="layout_center">
+    let template = [`<table cellspacing="0" class="center">
                         <thead>
                             <tr>
                                 <td style="border-right:none;">Id</td>
                                 <td style="border-right:none;">Name</td>
                                 <td style="border-right:none;">Restricted</td>
                                 <td style="border-right:none;">Price</td>
+                                <td style="border-right:none;">Add Client</td>
+                                <td style="border-right:none;">Show Clients</td>
                                 <td style="border-right:none;">Edit</td>
                                 <td>Delete</td>
                             </tr>
@@ -204,6 +201,8 @@ function displayEvents() {
                         <td style="border-right:none;">${event.name}</td>
                         <td style="border-right:none;">${event.isRestricted ? "Yes" : "No"}</td>
                         <td style="border-right:none;">${event.price == 0 ? "Free" : event.price}</td>
+                        <td style="border-right:none;"><button event-id=${event.id} class="action--add-client-to-event">Add Client</button></td>
+                        <td style="border-right:none;"><button event-id=${event.id} class="action--show-clients">Show Clients</button></td>
                         <td style="border-right:none;"><button event-id=${event.id} class="action--edit-event">E</button></td>
                         <td><button event-id=${event.id} class="action--delete-event">X</button></td>
                     </tr>
@@ -215,6 +214,8 @@ function displayEvents() {
 
     EventManager.getEventLayout().innerHTML = template.join('');
 
+    addClientToEventGUI();
+    displayClientsOnEvent();
     editEvent();
     removeEvent();
 }
@@ -228,7 +229,7 @@ EventManager.addEventForm.addEventListener('submit', function(e) {
     const newEvent              = new Event(eventName, eventRestriction, eventPrice);
 
     addEvent(newEvent);
-    EventManager.setValidationMessage(validationMessageText);
+    EventManager.setValidationMessage(`The event ${eventName} was successfully added to the database.`);
     displayEvents();
     
     e.preventDefault();
@@ -244,7 +245,7 @@ function removeEvent() {
             let eventId = e.target.getAttribute("event-id");
             removeEventById(eventId);
             displayEvents();
-            EventManager.setValidationMessage(validationMessageText);
+            EventManager.setValidationMessage(`This event has been successfully removed.`);
 
         });
     }
@@ -278,7 +279,7 @@ EventManager.editEventForm.addEventListener('submit', function(e) {
 
     updateEvent(eventId, eventName, eventRestriction, eventPrice);
     
-    EventManager.setValidationMessage(validationMessageText);
+    EventManager.setValidationMessage(`The event ${eventName} has been successfully updated.`);
     EventManager.toggleEditEventForm();
     displayEvents();
     
@@ -290,23 +291,7 @@ EventManager.editEventForm.addEventListener('submit', function(e) {
  * Clients
  */
 
-ClientManager.getAddClientForm().addEventListener('submit', function(e) {
-    const clientName   = ClientManager.getClientNameInput().value;
-    const clientGender = ClientManager.getClientGenderSelect().value;
-    const clientAge    = ClientManager.getClientAgeInput().value;
-    const clientMoney  = ClientManager.getClientMoneyInput().value;
-
-    const newClient    = new Client(clientName, clientGender, clientAge, clientMoney);
-
-    addClient(newClient);
-    ClientManager.setValidationMessage(validationMessageText);
-    displayClients();
-    
-    e.preventDefault();
-
-});
-
-function displayClients() {
+function displayClients(collection, layout) {
 
     let template = [`<table cellspacing="0" class="layout_center">
                         <thead>
@@ -316,6 +301,7 @@ function displayClients() {
                                 <td style="border-right:none;">Gender</td>
                                 <td style="border-right:none;">Age</td>
                                 <td style="border-right:none;">Money</td>
+                                <td class="td--add-client-to-event" style="border-right:none; display: none;">Add to Event</td>
                                 <td style="border-right:none;">Edit</td>
                                 <td>Delete</td>
                             </tr>
@@ -323,7 +309,7 @@ function displayClients() {
                         <tbody>
     `];
 
-    getClientCollection().forEach(client => {
+    collection.forEach(client => {
         template.push(`
                     <tr>
                         <td style="border-right:none;">${client.id}</td>
@@ -331,6 +317,7 @@ function displayClients() {
                         <td style="border-right:none;">${client.gender}</td>
                         <td style="border-right:none;">${client.age}</td>
                         <td style="border-right:none;">${client.money}</td>
+                        <td style="border-right:none; display: none;"><button client-id=${client.id} class="action--add-to-event">Add to Event</button></td>
                         <td style="border-right:none;"><button client-id=${client.id} class="action--edit-client">E</button></td>
                         <td><button client-id=${client.id} class="action--delete-client">X</button></td>
                     </tr>
@@ -340,11 +327,27 @@ function displayClients() {
     template.push(`</tbody
                 </table>`);
 
-    ClientManager.getClientLayout().innerHTML = template.join('');
+    layout.innerHTML = template.join('');
 
     editClient();
     removeClient();
 }
+
+ClientManager.getAddClientForm().addEventListener('submit', function(e) {
+    const clientName   = ClientManager.getClientNameInput().value;
+    const clientGender = ClientManager.getClientGenderSelect().value;
+    const clientAge    = ClientManager.getClientAgeInput().value;
+    const clientMoney  = ClientManager.getClientMoneyInput().value;
+
+    const newClient    = new Client(clientName, clientGender, clientAge, clientMoney);
+
+    addClient(newClient);
+    ClientManager.setValidationMessage(`The client ${clientName} has been successfully added to the database.`);
+    displayClients(getClientCollection(), ClientManager.getClientLayout());
+    
+    e.preventDefault();
+
+});
 
 function removeClient() {
     let deleteBtnsCollection = document.getElementsByClassName("action--delete-client");
@@ -354,8 +357,8 @@ function removeClient() {
 
             let clientId = e.target.getAttribute("client-id");
             removeClientById(clientId);
-            displayClients();
-            ClientManager.setValidationMessage(`The client has been successfully removed.`);
+            displayClients(getClientCollection(), ClientManager.getClientLayout());
+            ClientManager.setValidationMessage(`This client has been successfully removed.`);
         });
     }
         
@@ -376,8 +379,7 @@ function editClient() {
             ClientManager.getClientNewGenderSelect().value = client.gender;
             ClientManager.getClientNewAgeInput().value     = client.age;
             ClientManager.getClientNewMoneyInput().value   = client.money;
-
-                
+            
         });
     }
 }
@@ -392,11 +394,54 @@ ClientManager.editClientForm.addEventListener('submit', function(e) {
     updateClient(clientId, clientName, clientGender, clientAge, clientMoney);
     
     ClientManager.toggleEditClientForm();
-    displayClients();
+    ClientManager.setValidationMessage(`The client ${clientName} has been successfully updated.`);
+    displayClients(getClientCollection(), ClientManager.getClientLayout());
     
     e.preventDefault();
 
 });
 
+function addClientToEventGUI() {
+    let addClientToeventBts = document.getElementsByClassName("action--add-client-to-event");
+
+    for(let i = 0; i < addClientToeventBts.length; i++) {
+        addClientToeventBts[i].addEventListener('click', function(e1) {
+
+            let eventId = e1.target.getAttribute("event-id");
+            const event = getEventById(eventId);
+
+            let tdTitle = document.getElementsByClassName("td--add-client-to-event");
+            tdTitle[0].style.display = "block";
+            let addClientBts = document.getElementsByClassName("action--add-to-event");
+
+            for (let j = 0; j < addClientBts.length; j++) {
+                addClientBts[j].parentElement.style.display = "block";
+                
+                addClientBts[j].addEventListener('click', function(e2) {
+                    let clientId = e2.target.getAttribute("client-id");
+                    const client = getClientById(clientId);
+                    addClientToEvent(client, event);
+
+                    EventManager.setValidationMessage(`The client ${client.name} has been successfully added to the event ${event.name}`);
+                });
+            }
+        });
+    }
+}
+
+function displayClientsOnEvent () {
+    let showClientsBts = document.getElementsByClassName("action--show-clients");
+
+    for(let i = 0; i < showClientsBts.length; i++) {
+        showClientsBts[i].addEventListener('click', function(e) {
+            let eventId = e.target.getAttribute("event-id");
+            const event = getEventCollection().find(event => event.id == eventId);
+
+            displayClients(event.eventClients, document.getElementById("layout--clients-on-event"));
+        });
+    }
+
+}
+
 displayEvents();
-displayClients();
+displayClients(getClientCollection(), ClientManager.getClientLayout());

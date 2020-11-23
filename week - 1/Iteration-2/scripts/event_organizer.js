@@ -153,8 +153,8 @@ function addEvent(event) {
         return console.log("The adding of new events has been stopped by the system. To turn it on please run the toggleSystemFunction.");
     }
 
-    validationMessageText = `The event ${event.name} was successfully added to the database.`;
     getEventCollection().push(event);
+    return true;
 }
 
 /**
@@ -178,8 +178,6 @@ function updateEvent(id, name, isRestricted, price) {
 
 
     let eventIndex                                = getEventCollection().findIndex((event => event.id == id));
-
-    validationMessageText = (`The event has been successfully updated.`);
 
     getEventCollection()[eventIndex].name         = name;
     getEventCollection()[eventIndex].isRestricted = isRestricted;
@@ -223,8 +221,6 @@ function removeEventById(id) {
 
     let eventId = getEventCollection().indexOf(event);
     getEventCollection().splice(eventId, 1);
-    
-    validationMessageText = `The event ${event.name} has been successfully removed.`;
     return true;
 }
 
@@ -392,7 +388,6 @@ function addClient(client) {
     }
 
     getClientCollection().push(client);
-    validationMessageText = (`The client ${client.name} has been successfully added to the database.`);
     return true;
 }
 
