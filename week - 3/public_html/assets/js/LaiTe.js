@@ -205,7 +205,7 @@ let $ = (function() {
             };
         }
         
-        return;
+        return this;
     };
     
     Constructor.prototype.off = function() {
@@ -217,7 +217,7 @@ let $ = (function() {
             };
         }
         
-        return;
+        return this;
     };
     
     Constructor.prototype.parent = function() {
