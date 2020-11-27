@@ -1,21 +1,12 @@
 const CalendarManager = {
     monthTitleLayout     : $('.month h3'),
     currentTimeLayout    : $('.date .current-time'),
+    currentDateLayout    : $('.date .current-date'),
     
-    monthsCollection : [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-],
+    monthsCollection     : [
+                            "January", "February", "March", "April", "May", "June", "July", 
+                            "August", "September", "October", "November", "December"
+    ],
 
     getMonthsCollection() {
         return CalendarManager.monthsCollection;
@@ -27,6 +18,10 @@ const CalendarManager = {
     
     getCurrentTimeLayout() {
         return CalendarManager.currentTimeLayout;
+    },
+    
+    getCurrentDateLayout() {
+        return CalendarManager.currentDateLayout;
     }
 };
 
@@ -41,8 +36,8 @@ const DateManager = {
         DateManager.date = value;
     },
     
-    getCurrentMonth() {
-        return DateManager.getDateObject().getMonth();
+    getTextOfMonth() {
+        return CalendarManager.getMonthsCollection()[DateManager.getDateObject().getMonth()];
     },
     
     getSeconds() {
@@ -57,6 +52,14 @@ const DateManager = {
         return DateManager.getDateObject().getHours();
     },
     
+    getDay() {
+        return DateManager.getDateObject().getDay();
+    },
+    
+    getYear() {
+        return DateManager.getDateObject().getFullYear();
+    },
+    
     setCurrentTimeFormat(secs, mins, hours) {
         return `${hours}:${mins}:${secs}`;
     },
@@ -69,7 +72,7 @@ const DateManager = {
         return time;
     },
     
-    currentTime() {
+    displayCurrentTime() {
         DateManager.updateDateObject(new Date());
         let currentDate = DateManager.getDateObject();
         
@@ -78,10 +81,26 @@ const DateManager = {
         let hours = DateManager.addZeroPrefix(currentDate.getHours());
         
         CalendarManager.getCurrentTimeLayout().html(DateManager.setCurrentTimeFormat(secs, mins, hours));
-        setTimeout(function () { DateManager.currentTime(); }, 1000);
+        setTimeout(() => { DateManager.displayCurrentTime(); }, 1000);
+    },
+    
+    displayCurrentDate() {
+        const day    = DateManager.getDay();
+        const month  = DateManager.getTextOfMonth();
+        const year   = DateManager.getYear();
+        const format = `${month} ${day} ${year} y.`;
+        
+        CalendarManager.getCurrentDateLayout().html(format);
+    },
+    
+    displaySelectedDate() {
+        const month  = DateManager.getTextOfMonth();
+        const year   = DateManager.getYear();
+        const format = `${month}, ${year} y.`;
+        CalendarManager.getMonthTitleLayout().html(format);
     }
 };
 
-CalendarManager.getMonthTitleLayout().html(CalendarManager.getMonthsCollection()[DateManager.getCurrentMonth()]);
-
-DateManager.currentTime();
+DateManager.displayCurrentTime();
+DateManager.displaySelectedDate();
+DateManager.displayCurrentDate();
