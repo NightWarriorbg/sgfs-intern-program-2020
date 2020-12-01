@@ -196,44 +196,36 @@ let $ = (function() {
         return this;
     };
     
-    Constructor.prototype.on = function() {
+    Constructor.prototype.on = function(event, func) {
         if (document.addEventListener) {
-            return function (event, func) {
-                return this.each(function (element) {
-                    element.addEventListener(event, func, false);
-                });
-            };
+            return this.each(function (element) {
+                element.addEventListener(event, func, false);
+            });
         }
-        
-        return this;
     };
     
-    Constructor.prototype.off = function() {
+    Constructor.prototype.off = function(event, func) {
         if (document.removeEventListener) {
-            return function (event, func) {
-                return this.each(function (element) {
-                    element.removeEventListener(event, func, false);
-                });
-            };
+            return this.each(function (element) {
+                element.removeEventListener(event, func, false);
+            });
         }
-        
-        return this;
     };
     
     Constructor.prototype.parent = function() {
-        return this.nodes[0].parentNode;
+        return Constructor(this.nodes[0].parentNode);
     };
     
     Constructor.prototype.siblingNext = function() {
-        return this.nodes[0].previousElementSibling;
+        return Constructor(this.nodes[0].previousElementSibling);
     };
     
     Constructor.prototype.siblingPrev = function() {
-        return this.nodes[0].nextElementSibling;
+        return Constructor(this.nodes[0].nextElementSibling);
     };
     
     Constructor.prototype.children = function() {
-        return this.nodes[0].children;
+        return Constructor(this.nodes[0].children);
     };
     
     return Initialize;
