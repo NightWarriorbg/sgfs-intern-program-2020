@@ -1,6 +1,6 @@
 const CalendarManager = {
     monthTitleLayout     : $('.month h3'),
-    currentTimeLayout    : $('.date .current-time'),
+    //currentTimeLayout    : $('.date .current-time'),
     currentDateLayout    : $('.date .current-date'),
     weekdaysLayout       : $('.weekdays'),
     daysLayout           : $('.days'),
@@ -13,7 +13,7 @@ const CalendarManager = {
                             "August", "September", "October", "November", "December"
     ],
     
-    WEEKDAYS             : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    WEEKDAYS             : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     
     DAYS_IN_WEEK         : 7,
 
@@ -65,12 +65,13 @@ const CalendarManager = {
     
     displayDays() {
         const date                             = DateManager.getDateObject();
+        date.setDate(1);
         let template                           = [];
         let firstDayOfCurrentMonth             = date.getDay();
-        const prevLastDayOfMonth               = new Date(date.getFullYear(), date.getMonth(), 0).getDate() + 1;
+        const prevLastDayOfMonth               = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
         
-        for(let i = firstDayOfCurrentMonth - 1; i > 0; i-- ) {
-            template.push(`<div class="prev-days">${prevLastDayOfMonth - i}</div>`);
+        for(let i = firstDayOfCurrentMonth; i > 0; i-- ) {
+            template.push(`<div class="prev-days">${prevLastDayOfMonth - i + 1}</div>`);
         }
         
         const lastDayOfMonth                   = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -84,13 +85,13 @@ const CalendarManager = {
             } else {
                 template.push(`<div>${i}</div>`);
             }
+            
         }
         
         const lastDayOfCurrentMonth            = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDay();
+        const daysOfNextMonth                  = CalendarManager.DAYS_IN_WEEK - lastDayOfCurrentMonth ;
         
-        const daysOfNextMonth                  = CalendarManager.DAYS_IN_WEEK - lastDayOfCurrentMonth + 7;
-        
-        for (let i = 1; i <= daysOfNextMonth; i++) {
+        for (let i = 1; i < daysOfNextMonth; i++) {
             template.push(`<div class="next-days">${i}</div>`);
         }
         
@@ -103,6 +104,10 @@ const DateManager = {
     
     getDateObject() {
         return DateManager.date;
+    },
+    
+    setMonth(month) {
+        DateManager.getDateObject().setMonth(month);
     },
     
     updateDateObject(value) {
@@ -133,7 +138,7 @@ const DateManager = {
         return DateManager.getDateObject().getFullYear();
     },
     
-    setCurrentTimeFormat(secs, mins, hours) {
+    /*setCurrentTimeFormat(secs, mins, hours) {
         return `${hours}:${mins}:${secs}`;
     },
     
@@ -146,16 +151,15 @@ const DateManager = {
     },
     
     displayCurrentTime() {
-        DateManager.updateDateObject(new Date());
-        const currentDate = DateManager.getDateObject();
+        const time = new Date();
         
-        const secs        = DateManager.addZeroPrefix(currentDate.getSeconds());
-        const mins        = DateManager.addZeroPrefix(currentDate.getMinutes());
-        const hours       = DateManager.addZeroPrefix(currentDate.getHours());
+        const secs        = DateManager.addZeroPrefix(time.getSeconds());
+        const mins        = DateManager.addZeroPrefix(time.getMinutes());
+        const hours       = DateManager.addZeroPrefix(time.getHours());
         
         CalendarManager.getCurrentTimeLayout().html(DateManager.setCurrentTimeFormat(secs, mins, hours));
         setTimeout(() => { DateManager.displayCurrentTime(); }, 1000);
-    },
+    },*/
     
     displayCurrentDate() {
         const day    = DateManager.getDay();
@@ -180,29 +184,32 @@ const DateManager = {
     function renderCalendar() {
         CalendarManager.displayWeekdays();
         CalendarManager.displayDays();
-        DateManager.displayCurrentTime();
+        //Clock.displayCurrentTime();
         DateManager.displaySelectedDate();
         DateManager.displayCurrentDate();
     }
     
-    function Constructor() {
-        renderCalendar();
-    }
     
     function previousMonth() {
-        const date = DateManager.getDateObject();
+        let date = DateManager.getDateObject();
         CalendarManager.getPrevMonthButton().on('click', () => {
-            date.setMonth(date.getMonth() - 1);
-            renderCalendar();
+            DateManager.setMonth(date.getMonth() - 1); 
+           renderCalendar();
         });
     }
     
     function nextMonth() {
-        const date = DateManager.getDateObject();
-        CalendarManager.getNextMonthButton().on('click', () => {
-            date.setMonth(date.getMonth() + 1);
+        let date = DateManager.getDateObject();
+            CalendarManager.getNextMonthButton().on('click', () => {
+            DateManager.setMonth(date.getMonth() + 1);
             renderCalendar();
         });
+    }
+    
+    function Constructor() {
+        renderCalendar();
+        previousMonth();
+        nextMonth();
     }
     
     return new Constructor();

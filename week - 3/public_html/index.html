@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/event.css">
     <link rel="icon" type="image/png" href="assets/img/calendar-icon.png">
     <script src="https://kit.fontawesome.com/30367b6f00.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -16,20 +17,21 @@
         <div id="calendar">
             
             <div class="date">
-                <h1 class="current-time">Time Placeholder</h1>
-                <p class="current-date">Date Placeholder</p>
+                <div>
+                    <h1 class="current-time">Time Placeholder</h1>
+                    <p class="current-date">Date Placeholder</p>
+                </div>
                 
-                <div class="cog">
-                    <i class="fas fa-cog">
-                    </i>
+                <div class="date cog">
+                    <i class="fas fa-cog"></i>
                 </div>
             </div>
             
             <div class="month">
                 <h3>Current Month Placeholder</h3>
                 <div class="angles">
-                    <i class="fas fa-angle-up prev-month" ></i>
-                    <i class="fas fa-angle-down next-month"></i>
+                    <i class="fas fa-angle-up prev-element" ></i>
+                    <i class="fas fa-angle-down next-element"></i>
                 </div>
             </div>
             
@@ -37,14 +39,35 @@
                 
             </div>
             
-            <div class="days">
+            <div class="elements">
                 PLACEHOLDER
+            </div>
+            
+            <div class="event-area">
+                <h2>Today</h2>
+                
+                <form id="form--add-event" name="form--add-event">
+                    <input id="input--event-name" name="input--event-name" type="text" value="Add Event Name">
+                    <input id="action--add-event" name="action--add-event" type="submit" value="Save">
+                </form>
+                
+                <div class="layout--show-events">
+                    <ul>
+                        <li>Event1</li>
+                        <li>Event2</li>
+                        <li>Event3</li>
+                    </ul>
+                </div>
             </div>
            
         </div>
     </div>
-
-    <script src="assets/js/LaiTe.js"></script>
-    <script src="assets/js/script.js"></script>
+    
+    <script src="assets/js/lib/LaiTe.js"></script>
+    
+    <script src="assets/js/src/clock.js"></script>
+    <script src="assets/js/src/calendar.js"></script>
+    <script src="assets/js/src/event.script.js"></script>
+    <script src="assets/js/src/event.DOM.js"></script>
 </body>
 </html>

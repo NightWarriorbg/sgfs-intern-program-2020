@@ -1,0 +1,95 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 4, 2020, 5:56:20 PM
+    Author     : NightWarrior
+*/
+
+.event-area {
+    margin: 0 auto;
+    display: block;
+    flex-wrap: wrap;
+    padding: 0rem 1.5rem 1rem 1.5rem;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #5D5D5D;
+}
+
+.event-area h2 {
+    font-weight: 400;
+}
+
+.layout--show-events {
+    margin-top: 2rem;
+    margin: 0 auto;
+}
+
+.layout--show-events ul {
+    list-style-type: none;
+    text-align: left;
+}
+
+.layout--show-events ul li {
+    display: block;
+    height: 2rem;
+    width: 100%;
+    line-height: 2rem;
+    border-left: 8px solid #007ED6;
+    text-indent: 2rem;
+}
+
+.layout--show-events ul li:hover {
+    background-color: #616161;
+}
+
+form {
+    display: inline-block;
+}
+
+input[type=text] {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    display: block;
+    background-color: #212121;
+    border: 1px solid #9A9797;
+    width: 160px;
+    height: 25px;
+    color: #9A9797;
+}
+
+input[type=text]:hover {
+    background-color: #131313;
+    border-color: #B5B4B4;
+    color: #838181;
+}
+
+input[type=text]:focus {
+    background-color: white;
+    outline: none;
+    border-color: #007ED6;
+}
+
+input[type=submit] {
+    display: inline-block;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 90px;
+    height: 30px;
+    background-color: #007ED6;
+    border: none;
+    color: white;
+}
+
+input[type=submit]:focus {
+    background-color: #838181;
+    outline: none;
+    border: none;
+}
+
+input[type=submit]:hover {
+    border: 1px solid #00ADE5;
+}
+

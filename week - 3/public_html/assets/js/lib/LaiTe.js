@@ -124,6 +124,14 @@ let $ = (function() {
         
     };
     
+    Constructor.prototype.empty = function () {
+        this.each(function(element) {
+            element.innerHTML = "";
+        });
+        
+        return this;
+    };
+    
     Constructor.prototype.css = function(property, value) {
         this.each(function (element) {
            element.style[property] = value; 
@@ -160,7 +168,7 @@ let $ = (function() {
     
     Constructor.prototype.attribute = function(attribute, value) {
         if (typeof value !== "undefined") {
-            this.each(function(element) {
+            return this.each(function(element) {
                 element.setAttribute(attribute, value);
             });
         }
@@ -199,7 +207,7 @@ let $ = (function() {
     Constructor.prototype.on = function(event, func) {
         if (document.addEventListener) {
             return this.each(function (element) {
-                element.addEventListener(event, func, false);
+                element.addEventListener(event, func);
             });
         }
     };
@@ -207,9 +215,19 @@ let $ = (function() {
     Constructor.prototype.off = function(event, func) {
         if (document.removeEventListener) {
             return this.each(function (element) {
-                element.removeEventListener(event, func, false);
+                element.removeEventListener(event, func);
             });
         }
+    };
+    
+    Constructor.prototype.show = function () {
+        this.css('display', 'block');
+        return this;
+    };
+    
+    Constructor.prototype.hide = function () {
+        this.css('display', 'none');
+        return this;
     };
     
     Constructor.prototype.parent = function() {
