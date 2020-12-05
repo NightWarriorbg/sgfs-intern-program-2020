@@ -51,14 +51,12 @@ function renderEvents() {
         
     EventManager.getEventCollection().forEach(event => {
         const date = CalendarManager.getEventDateObj();
-        console.log(`Due: `, event.due);
-        console.log('Current: ', date);
         const isDate =  date.getFullYear() == event.due.getFullYear() && 
                         date.getMonth() == event.due.getMonth() && 
                         date.getDate() == event.due.getDate();
         if (isDate) {
             template.push(`<li><span class="event-time">${getEventDue(event)}</span> - ${event.name} <a class="remove-event" href="#" event-id="${event.id}">X</a></li>`);
-        }
+        } 
     });
 
     template.push('</ul>');
@@ -79,7 +77,6 @@ EventDomManager.getFormAddEvent().on('submit', (e) => {
     date.setHours(hours);
     date.setMinutes(minutes);
     date.setSeconds(seconds);
-    //date.setDate(new Date().getDate());
 
     addEvent(new Event(eventName, date));
     renderEvents();

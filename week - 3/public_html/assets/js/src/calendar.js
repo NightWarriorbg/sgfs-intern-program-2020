@@ -207,7 +207,7 @@ const Calendar = (function () {
             
             const format = `${CalendarManager.WEEKDAYS_FULL[date.getDay()]} ${date.getDate()}`;
             EventDomManager.getSelectedDay().html(format);
-            
+            console.log(date);
             renderEvents();
         });
     }
