@@ -47,16 +47,13 @@
                 <h2>Today</h2>
                 
                 <form id="form--add-event" name="form--add-event">
-                    <input id="input--event-name" name="input--event-name" type="text" value="Add Event Name">
+                    <input id="input--event-name" name="input--event-name" type="text" value="Add Event Name" required>
+                    <input type="time" id="input--event-time" name="input--event-time" step="1">
                     <input id="action--add-event" name="action--add-event" type="submit" value="Save">
                 </form>
                 
                 <div class="layout--show-events">
-                    <ul>
-                        <li>Event1</li>
-                        <li>Event2</li>
-                        <li>Event3</li>
-                    </ul>
+                    
                 </div>
             </div>
            
@@ -65,9 +62,10 @@
     
     <script src="assets/js/lib/LaiTe.js"></script>
     
-    <script src="assets/js/src/clock.js"></script>
     <script src="assets/js/src/calendar.js"></script>
+    <script src="assets/js/src/notification.js"></script>
     <script src="assets/js/src/event.script.js"></script>
     <script src="assets/js/src/event.DOM.js"></script>
+    <script src="assets/js/src/clock.js"></script>
 </body>
 </html>

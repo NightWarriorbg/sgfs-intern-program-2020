@@ -158,7 +158,7 @@ let $ = (function() {
             return 
         });
     };*/
-    
+        
     /**
      * Removes a class to elements
      * @param {String} name - class name
@@ -182,8 +182,7 @@ let $ = (function() {
        this.mapOne(function(element) {
             return element.getAttribute(attribute);
         });
-        
-        //return this;
+                
     };
     
     Constructor.prototype.append = function(element) {

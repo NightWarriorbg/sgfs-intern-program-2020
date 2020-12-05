@@ -7,7 +7,8 @@
 const EventDomManager = {
     layoutShowEvents : $('.layout--show-events'),
     formAddEvent     : $('#form--add-event'),
-    inputEventName   : $('#input--event-name'),
+    inputEventName   : document.getElementById('input--event-name'),
+    inputEventTime   : document.getElementById('input--event-time'),
     selectedDay      : $('.event-area h2'),
     
     getLayoutShowEvents() {
@@ -22,37 +23,69 @@ const EventDomManager = {
         return EventDomManager.inputEventName;
     },
     
+    getInputEventTime() {
+        return EventDomManager.inputEventTime;
+    },
+    
     getSelectedDay() {
         return EventDomManager.selectedDay;
     }
 };
 
-const eventDOM = (function (){ 
-    function renderEvents() {
-        let template = ['<ul>'];
+function getEventDue(event) {
+    const date    = event.due;
+    
+    const seconds = date.getSeconds();
+    const minutes = date.getMinutes();
+    const hours   = date.getHours();
+    
+    return `${hours}:${minutes}:${seconds}`;
+}
 
-        EventManager.getEventCollection().forEach(event => {
-            template.push(`<li>${event.name}</li>`);
-        });
 
-        template.push('</ul>');
-        EventDomManager.getLayoutShowEvents().html(template.join(''));
-    }
 
-    EventDomManager.getFormAddEvent().on('submit', (e) => {
-        const eventName = EventDomManager.getInputEventName().attribute('value');
-        console.log(eventName);
-        const date      = new Date();
-
-        addEvent(new Event(eventName, date));
-        renderEvents();
-
-        e.preventDefault();
+function renderEvents() {
+               
+    let template = ['<ul>'];
+        
+    EventManager.getEventCollection().forEach(event => {
+        const date = CalendarManager.getEventDateObj();
+        console.log(`Due: `, event.due);
+        console.log('Current: ', date);
+        const isDate =  date.getFullYear() == event.due.getFullYear() && 
+                        date.getMonth() == event.due.getMonth() && 
+                        date.getDate() == event.due.getDate();
+        if (isDate) {
+            template.push(`<li><span class="event-time">${getEventDue(event)}</span> - ${event.name}</li>`);
+        }
     });
+
+    template.push('</ul>');
+    EventDomManager.getLayoutShowEvents().html(template.join(''));
+}
+
+function addEventToDate(event, date) {
     
-    function Constructor() {
-        renderEvents();
-    }
+}
+
+EventDomManager.getFormAddEvent().on('submit', (e) => {
+    const eventName = EventDomManager.getInputEventName().value;
+    const eventTime = EventDomManager.getInputEventTime().value;
+        
+    const hours     = eventTime.substring(0, 2);
+    const minutes   = eventTime.substring(3, 5);
+    const seconds   = eventTime.substring(6, 8);
+
+    const date      = CalendarManager.getEventDateObj();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(seconds);
+    //date.setDate(new Date().getDate());
+
+    addEvent(new Event(eventName, date));
+    renderEvents();
+
+    e.preventDefault();
+});
     
-    return new Constructor();
-})();
+renderEvents();

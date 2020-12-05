@@ -93,3 +93,32 @@ input[type=submit]:hover {
     border: 1px solid #00ADE5;
 }
 
+input[type=time] {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    display: block;
+    background-color: #212121;
+    border: 1px solid #9A9797;
+    width: 160px;
+    height: 25px;
+    color: #9A9797;
+}
+
+input[type=time]:hover {
+    background-color: #131313;
+    border-color: #B5B4B4;
+    color: #838181;
+}
+
+input[type=time]:focus {
+    background-color: white;
+    outline: none;
+    border-color: #007ED6;
+}
+
+.event {
+    background: lightblue;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}

@@ -143,9 +143,7 @@ const CalendarManager = {
         
 };
 
-const Calendar = (function () {
-    
-    function emptyLayout() {
+function emptyLayout() {
         CalendarManager.getWeekdaysLayout().empty();
         CalendarManager.getDaysLayout().empty();
     }
@@ -180,6 +178,8 @@ const Calendar = (function () {
             
             const format = `${CalendarManager.WEEKDAYS_FULL[date.getDay()]} ${date.getDate()}`;
             EventDomManager.getSelectedDay().html(format);
+            
+            renderEvents();
         });
     }
     
@@ -332,7 +332,9 @@ const Calendar = (function () {
         const format = chooseSelectedDateFormat();
         CalendarManager.getMonthTitleLayout().html(format);
     }
-        
+
+const Calendar = (function () {
+    
     function render() {
         if (isView("months")) {
             emptyLayout();
@@ -352,6 +354,7 @@ const Calendar = (function () {
         }
         
         displayCurrentDate();
+        //renderEvents(CalendarManager.getDateObject());
     }
        
     function previous() {
