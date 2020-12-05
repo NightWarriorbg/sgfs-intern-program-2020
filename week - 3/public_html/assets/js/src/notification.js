@@ -7,7 +7,7 @@
 function notify(text) {
     if (!("Notification" in window)) {
        alert("This browser does not support desktop notification");
-  }
+    }
   
     if (Notification.permission !== "denied") {
         Notification.requestPermission().then(function (permission) {

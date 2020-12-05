@@ -32,6 +32,17 @@ and open the template in the editor.
     text-align: left;
 }
 
+.layout--show-events ul a {
+    text-decoration: none;
+    color: red;
+    padding: 4px 4px 4px 4px;
+}
+
+.layout--show-events ul a:hover {
+    text-decoration: underline;
+    padding: 4px 4px 4px 4px;
+}
+
 .layout--show-events ul li {
     display: block;
     height: 2rem;

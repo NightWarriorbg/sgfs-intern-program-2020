@@ -29,7 +29,8 @@ const EventDomManager = {
     
     getSelectedDay() {
         return EventDomManager.selectedDay;
-    }
+    },
+    
 };
 
 function getEventDue(event) {
@@ -56,16 +57,14 @@ function renderEvents() {
                         date.getMonth() == event.due.getMonth() && 
                         date.getDate() == event.due.getDate();
         if (isDate) {
-            template.push(`<li><span class="event-time">${getEventDue(event)}</span> - ${event.name}</li>`);
+            template.push(`<li><span class="event-time">${getEventDue(event)}</span> - ${event.name} <a class="remove-event" href="#" event-id="${event.id}">X</a></li>`);
         }
     });
 
     template.push('</ul>');
     EventDomManager.getLayoutShowEvents().html(template.join(''));
-}
-
-function addEventToDate(event, date) {
     
+    removeEvent();
 }
 
 EventDomManager.getFormAddEvent().on('submit', (e) => {
@@ -87,5 +86,15 @@ EventDomManager.getFormAddEvent().on('submit', (e) => {
 
     e.preventDefault();
 });
+
+function removeEvent() {
+    
+    const removeEventBtns = $('.remove-event');
+    removeEventBtns.on('click', (e) => {
+        let eventId = e.target.getAttribute('event-id');
+        removeEventById(eventId);
+        renderEvents();
+    });
+}
     
 renderEvents();
