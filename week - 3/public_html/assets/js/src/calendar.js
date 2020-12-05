@@ -162,6 +162,35 @@ function emptyLayout() {
         CalendarManager.getWeekdaysLayout().html(template.join(''));
     }
     
+    function displayCurrentDate() {
+        const day         = CalendarManager.getDay();
+        const month       = CalendarManager.getTextOfMonth();
+        const year        = CalendarManager.getYear();
+        
+        CalendarManager.getCurrentDateLayout().html(CalendarManager.getCurrentDateObj().toDateString());
+    }
+    
+    function chooseSelectedDateFormat() {
+        const month  = CalendarManager.getTextOfMonth();
+        const year   = CalendarManager.getYear();
+        if (isView("months")) {
+            return year;
+        }
+        
+        if (isView("years")) {
+            return `${year} - ${year+9}`;
+        }
+        
+        return `${month}, ${year}`;
+    }
+    
+    function displaySelectedDate() {
+        const format = chooseSelectedDateFormat();
+        CalendarManager.getMonthTitleLayout().html(format);
+    }
+
+const Calendar = (function () {
+    
     function selectDay() {
         let days = $('.day');
         
@@ -219,7 +248,7 @@ function emptyLayout() {
         
         CalendarManager.getDaysLayout().html(template.join(''));
         
-        selectDay();
+        //selectDay();
     }
     
     function selectMonth() {
@@ -261,7 +290,7 @@ function emptyLayout() {
         
         CalendarManager.getDaysLayout().html(template.join(''));
         
-        selectMonth();
+        //selectMonth();
     }
     
     function selectYear() {
@@ -303,54 +332,25 @@ function emptyLayout() {
         
         CalendarManager.getDaysLayout().html(template.join(''));
         
-        selectYear();
+        //selectYear();
     }
-           
-    function displayCurrentDate() {
-        const day         = CalendarManager.getDay();
-        const month       = CalendarManager.getTextOfMonth();
-        const year        = CalendarManager.getYear();
-        
-        CalendarManager.getCurrentDateLayout().html(CalendarManager.getCurrentDateObj().toDateString());
-    }
-    
-    function chooseSelectedDateFormat() {
-        const month  = CalendarManager.getTextOfMonth();
-        const year   = CalendarManager.getYear();
-        if (isView("months")) {
-            return year;
-        }
-        
-        if (isView("years")) {
-            return `${year} - ${year+9}`;
-        }
-        
-        return `${month}, ${year}`;
-    }
-    
-    function displaySelectedDate() {
-        const format = chooseSelectedDateFormat();
-        CalendarManager.getMonthTitleLayout().html(format);
-    }
-
-const Calendar = (function () {
     
     function render() {
         if (isView("months")) {
             emptyLayout();
             displayMonths();
             displaySelectedDate();
-            //selectMonth();
+            selectMonth();
         } else if(isView("years")) {
             emptyLayout();
             displayYears();
             displaySelectedDate();
-            //selectYear();
+            selectYear();
         } else {
             displayWeekdays();
             displayDays();
             displaySelectedDate();
-            //selectDay();
+            selectDay();
         }
         
         displayCurrentDate();
