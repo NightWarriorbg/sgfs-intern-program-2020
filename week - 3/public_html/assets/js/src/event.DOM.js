@@ -8,6 +8,7 @@ const EventDomManager = {
     layoutShowEvents : $('.layout--show-events'),
     formAddEvent     : $('#form--add-event'),
     inputEventName   : $('#input--event-name'),
+    selectedDay      : $('.event-area h2'),
     
     getLayoutShowEvents() {
         return EventDomManager.layoutShowEvents;
@@ -19,28 +20,39 @@ const EventDomManager = {
     
     getInputEventName() {
         return EventDomManager.inputEventName;
+    },
+    
+    getSelectedDay() {
+        return EventDomManager.selectedDay;
     }
 };
 
-function renderEvents() {
-    let template = ['<ul>'];
-    
-    EventManager.getEventCollection().forEach(event => {
-        template.push(`<li>${event.name}</li>`);
+const eventDOM = (function (){ 
+    function renderEvents() {
+        let template = ['<ul>'];
+
+        EventManager.getEventCollection().forEach(event => {
+            template.push(`<li>${event.name}</li>`);
+        });
+
+        template.push('</ul>');
+        EventDomManager.getLayoutShowEvents().html(template.join(''));
+    }
+
+    EventDomManager.getFormAddEvent().on('submit', (e) => {
+        const eventName = EventDomManager.getInputEventName().attribute('value');
+        console.log(eventName);
+        const date      = new Date();
+
+        addEvent(new Event(eventName, date));
+        renderEvents();
+
+        e.preventDefault();
     });
     
-    template.push('</ul>');
-    EventDomManager.getLayoutShowEvents().html(template.join(''));
-}
-
-EventDomManager.getFormAddEvent().on('submit', (e) => {
-    const eventName = EventDomManager.getInputEventName().attribute('value');
-    const date      = new Date();
+    function Constructor() {
+        renderEvents();
+    }
     
-    addEvent(new Event(eventName, date));
-    renderEvents();
-    
-    e.preventDefault();
-});
-
-renderEvents();
+    return new Constructor();
+})();

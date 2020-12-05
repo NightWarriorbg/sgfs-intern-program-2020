@@ -3,7 +3,7 @@ const CalendarManager = {
     /**
      * DOM Components
      */
-    monthTitleLayout     : $('.month h3'),
+    monthTitleLayout     : $('.month_header h3'),
     currentDateLayout    : $('.date .current-date'),
     weekdaysLayout       : $('.weekdays'),
     daysLayout           : $('.elements'),
@@ -18,6 +18,7 @@ const CalendarManager = {
     
     date                 : new Date(),
     currentDate          : new Date(),
+    eventDate            : new Date(),
     
     MONTHS               : [
                             "January", "February", "March", "April", "May", "June", "July", 
@@ -25,10 +26,10 @@ const CalendarManager = {
     ],
     
     MONTHS_ABR           : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    
-    WEEKDAYS             : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    
+    WEEKDAYS             : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], 
+    WEEKDAYS_FULL        : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     DAYS_IN_WEEK         : 7,
+    YEARS_TO_DISPLAY     : 10,
     
     currentView          : "days",
 
@@ -88,6 +89,10 @@ const CalendarManager = {
         return CalendarManager.currentDate;
     },
     
+    getEventDateObj() {
+        return CalendarManager.eventDate;
+    },
+    
     setMonth(month) {
         CalendarManager.getDateObject().setMonth(month);
     },
@@ -120,6 +125,10 @@ const CalendarManager = {
         return CalendarManager.getDateObject().getDay();
     },
     
+    getMonth() {
+        return CalendarManager.getDateObject().getMonth();
+    },
+    
     getYear() {
         return CalendarManager.getDateObject().getFullYear();
     },
@@ -134,16 +143,15 @@ const CalendarManager = {
         
 };
 
-const Calendar = function () {
-    
-    function isCurrentDate(value) {
-        const date = CalendarManager.getDateObject();
-        return value === new Date().getDate() && date.getMonth() === new Date().getMonth();
-    }
+const Calendar = (function () {
     
     function emptyLayout() {
         CalendarManager.getWeekdaysLayout().empty();
         CalendarManager.getDaysLayout().empty();
+    }
+    
+    function isView(view) {
+        return CalendarManager.getCurrentView().localeCompare(view) == 0;
     }
     
     function displayWeekdays() {
@@ -156,9 +164,30 @@ const Calendar = function () {
         CalendarManager.getWeekdaysLayout().html(template.join(''));
     }
     
+    function selectDay() {
+        let days = $('.day');
+        
+        days.on('click', (e) => {
+            
+            const date   = CalendarManager.getEventDateObj();
+            const year   = CalendarManager.getYear();
+            const month  = CalendarManager.getMonth();
+            const day    = e.target.innerHTML; 
+            
+            date.setFullYear(year);
+            date.setMonth(month);
+            date.setDate(day);
+            
+            const format = `${CalendarManager.WEEKDAYS_FULL[date.getDay()]} ${date.getDate()}`;
+            EventDomManager.getSelectedDay().html(format);
+        });
+    }
+    
     function displayDays() {
         const date                             = CalendarManager.getDateObject();
         date.setDate(1);
+        //date.setMonth(month);
+        
         let template                           = [];
         let firstDayOfCurrentMonth             = date.getDay();
         const prevLastDayOfMonth               = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
@@ -170,8 +199,10 @@ const Calendar = function () {
         const lastDayOfMonth                   = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
         
         for (let i = 1; i <= lastDayOfMonth; i++) {
-                       
-            if (isCurrentDate(i)) {
+             
+            const isCurrentDay = i === new Date().getDate() && date.getMonth() === new Date().getMonth();
+            
+            if (isCurrentDay) {
                 template.push(`<div class="current-element day">${i}</div>`);
             } else {
                 template.push(`<div class="day">${i}</div>`);
@@ -187,6 +218,26 @@ const Calendar = function () {
         }
         
         CalendarManager.getDaysLayout().html(template.join(''));
+        
+        selectDay();
+    }
+    
+    function selectMonth() {
+        let months = $('.month');
+        
+             months.on('click', (e) => {
+                const date           = CalendarManager.getDateObject();
+                const selectedMonth  = e.target.innerHTML;
+                const monthIndex = CalendarManager.getMonthsAbr().findIndex(month => month == selectedMonth);
+                
+                if (e.target.classList.contains("next-month")) {
+                    date.setFullYear(date.getFullYear() + 1);
+                }
+                
+                date.setMonth(monthIndex);
+                CalendarManager.setCurrentView("days");
+                render();
+        });
     }
     
     function displayMonths() {
@@ -195,7 +246,9 @@ const Calendar = function () {
         const length       = CalendarManager.getMonthsAbr().length;
         for(let i = 0; i < length; i++) {
 
-            if(isCurrentDate(i)) {
+            const isCurrentMonth = i === new Date().getMonth();
+            
+            if(isCurrentMonth) {
                 template.push(`<div class="current-element month">${CalendarManager.getMonthsAbr()[i]}</div>`);
             } else {
                 template.push(`<div class="month">${CalendarManager.getMonthsAbr()[i]}</div>`);
@@ -203,23 +256,40 @@ const Calendar = function () {
         }
         
         for(let i = 0; i < 4; i++) {
-            template.push(`<div class="next-element month">${CalendarManager.getMonthsAbr()[i]}</div>`);
+            template.push(`<div class="next-element month next-month">${CalendarManager.getMonthsAbr()[i]}</div>`);
         }
         
         CalendarManager.getDaysLayout().html(template.join(''));
         
-        let months = $('.month').on('click', (e) => {
+        selectMonth();
+    }
+    
+    function selectYear() {
+        let years = $('.year');
+        
+        years.on('click', (e) => {
+            const date = CalendarManager.getDateObject();
+            const selectedYear = e.target.innerHTML;
             
+            date.setFullYear(selectedYear);
+            CalendarManager.setCurrentView("months");
+            render();
         });
     }
     
     function displayYears() {
         const date         = CalendarManager.getDateObject();
         let template       = [];
-        const length       = CalendarManager.getYear() + 9;
-        for(let i = CalendarManager.getYear(); i <= length; i++) {
+        const length       = CalendarManager.getYear() + CalendarManager.YEARS_TO_DISPLAY;
+        
+        for(let i = length - 3; i < length; i++) {
+            template.push(`<div class="prev-element year">${i}</div>`);
+        }
+        
+        for(let i = CalendarManager.getYear(); i < length; i++) {
             
-            const isCurrentYear = i === new Date().getFullYear();
+            const isCurrentYear = (i === new Date().getFullYear());
+            
             if(isCurrentYear) {
                 template.push(`<div class="current-element year">${i}</div>`);
             } else {
@@ -227,13 +297,15 @@ const Calendar = function () {
             }
         }
         
-        for(let i = length + 1; i < length + 7; i++) {
+        for(let i = length; i < length + 3; i++) {
             template.push(`<div class="next-element year">${i}</div>`);
         }
         
         CalendarManager.getDaysLayout().html(template.join(''));
+        
+        selectYear();
     }
-    
+           
     function displayCurrentDate() {
         const day         = CalendarManager.getDay();
         const month       = CalendarManager.getTextOfMonth();
@@ -245,11 +317,11 @@ const Calendar = function () {
     function chooseSelectedDateFormat() {
         const month  = CalendarManager.getTextOfMonth();
         const year   = CalendarManager.getYear();
-        if (CalendarManager.getCurrentView().localeCompare("months") === 0) {
+        if (isView("months")) {
             return year;
         }
         
-        if (CalendarManager.getCurrentView().localeCompare("years") === 0) {
+        if (isView("years")) {
             return `${year} - ${year+9}`;
         }
         
@@ -260,43 +332,37 @@ const Calendar = function () {
         const format = chooseSelectedDateFormat();
         CalendarManager.getMonthTitleLayout().html(format);
     }
-    
-    function selectDay() {
-        let days = $('.day').removeClass('selected');
-        days.on('click', (e) => {
-            //e.target.classList.add('selected');
-            
-        });
-    }
-    
+        
     function render() {
-        if (CalendarManager.getCurrentView().localeCompare("months") === 0) {
+        if (isView("months")) {
             emptyLayout();
             displayMonths();
             displaySelectedDate();
-        } else if(CalendarManager.getCurrentView().localeCompare("years") === 0) {
+            //selectMonth();
+        } else if(isView("years")) {
             emptyLayout();
             displayYears();
             displaySelectedDate();
+            //selectYear();
         } else {
             displayWeekdays();
             displayDays();
             displaySelectedDate();
-            selectDay();
+            //selectDay();
         }
         
         displayCurrentDate();
     }
-    
+       
     function previous() {
         let date = CalendarManager.getDateObject();
         CalendarManager.getPrevMonthButton().on('click', () => {
-            if (CalendarManager.getCurrentView().localeCompare("days") === 0) {
+            if (isView("days")) {
                 CalendarManager.setMonth(date.getMonth() - 1); 
-            } else if (CalendarManager.getCurrentView().localeCompare("months") === 0) {
+            } else if (isView("months")) {
                 CalendarManager.setYear(date.getFullYear() - 1);
             } else {
-                CalendarManager.setYear(date.getFullYear() - 9);
+                CalendarManager.setYear(date.getFullYear() - CalendarManager.YEARS_TO_DISPLAY);
             }
             render();
         });
@@ -305,12 +371,12 @@ const Calendar = function () {
     function next() {
         let date = CalendarManager.getDateObject();
         CalendarManager.getNextMonthButton().on('click', () => {
-            if (CalendarManager.getCurrentView().localeCompare("days") === 0) {
+            if (isView("days")) {
                 CalendarManager.setMonth(date.getMonth() + 1); 
-            } else if (CalendarManager.getCurrentView().localeCompare("months") === 0) {
+            } else if (isView("months")) {
                 CalendarManager.setYear(date.getFullYear() + 1);
             } else {
-                CalendarManager.setYear(date.getFullYear() + 9);
+                CalendarManager.setYear(date.getFullYear() + CalendarManager.YEARS_TO_DISPLAY);
             }
             render();
         });
@@ -318,12 +384,12 @@ const Calendar = function () {
     
     function switchView() {
         CalendarManager.getMonthTitleLayout().on('click', () => {
-            if (CalendarManager.getCurrentView().localeCompare("days") === 0) {
+            if (isView("days")) {
                 CalendarManager.setCurrentView("months");
                 return render();
             } 
             
-            if (CalendarManager.getCurrentView().localeCompare("months") === 0) {
+            if (isView("months")) {
                 CalendarManager.setCurrentView("years");
                 return render();
             }
@@ -334,6 +400,9 @@ const Calendar = function () {
         const currentDate = new Date();
         CalendarManager.setMonth(currentDate.getMonth());
         CalendarManager.setYear(currentDate.getFullYear());
+        CalendarManager.getEventDateObj().setDate(currentDate.getDate());
+        CalendarManager.getEventDateObj().setMonth(currentDate.getMonth());
+        CalendarManager.getEventDateObj().setFullYear((currentDate.getFullYear()));
     }
     
     function resetView() {
@@ -350,7 +419,8 @@ const Calendar = function () {
         next();
         switchView();
         resetView();
+        //selectDay();
     }
     
     return new Constructor();
-}();
+})();

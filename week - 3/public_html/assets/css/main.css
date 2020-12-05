@@ -66,35 +66,35 @@ body {
     cursor: pointer;
 }
 
-.month {
+.month_header {
     display: flex;
     align-items: center;
     padding: 1rem 3.5rem 1rem 3.5rem;
 }
 
-.month h3 {
+.month_header h3 {
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 3px;
     opacity: 0.7;
 }
 
-.month h3:hover {
+.month_header h3:hover {
     opacity: 1;
     cursor: pointer;
 }
 
-.month i {
+.month_header i {
     margin-left: 3rem;
     font-size: 1.8rem;
     cursor: pointer;
 }
 
-.month i:hover {
+.month_header i:hover {
     opacity: 0.6; 
 }
 
-.month .angles {
+.month_header .angles {
     margin-left: auto;
 }
 

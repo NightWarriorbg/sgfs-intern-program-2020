@@ -153,6 +153,12 @@ let $ = (function() {
         return this;
     };
     
+    /*Constructor.prototype.hasClass = function (name) {
+        this.each(function(element) {
+            return 
+        });
+    };*/
+    
     /**
      * Removes a class to elements
      * @param {String} name - class name
@@ -174,10 +180,10 @@ let $ = (function() {
         }
     
        this.mapOne(function(element) {
-            element.getAttribute(attribute);
+            return element.getAttribute(attribute);
         });
         
-        return this;
+        //return this;
     };
     
     Constructor.prototype.append = function(element) {
